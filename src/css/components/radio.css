@@ -1,0 +1,110 @@
+.perseus-widget-radio input[type="checkbox"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.perseus-widget-radio input[type="checkbox"] + label:first-of-type {
+    border-top: 1px solid #BABEC2;
+}
+.perseus-widget-radio input[type="checkbox"] + label {
+    display: block;
+    padding: 16px;
+    border-bottom: 1px solid #BABEC2;
+}
+.perseus-widget-radio input[type="checkbox"]:focus + label:before {
+    box-shadow: 0px 0px 0px 2px white, 0px 0px 0px 4px rgb(136, 141, 147);
+}
+.perseus-widget-radio input[type="checkbox"] + label:before {
+    content: "\00A0";
+    font-weight: bold;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    border-radius: 14px;
+    color: rgb(136, 141, 147);
+    border-color: rgb(136, 141, 147);
+    border: 2px solid;
+    margin-right: 16px;
+    line-height: 22px;
+}
+.perseus-widget-radio input[type="checkbox"]:checked + label {
+    background-color: white;
+}
+.perseus-widget-radio input[type="checkbox"]:checked + label:before {
+    background-color: rgb(113, 179, 7);
+    border-color: rgb(113, 179, 7);
+    color: white;
+    content: "✔";
+}
+.perseus-widget-radio input[type="checkbox"]:checked:focus + label:before {
+    box-shadow: 0px 0px 0px 2px white, 0px 0px 0px 4px rgb(113, 179, 7);
+}
+
+.perseus-widget-radio input[type="radio"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.perseus-widget-radio input[type="radio"] + label:first-of-type {
+    border-top: 1px solid #BABEC2;
+}
+.perseus-widget-radio input[type="radio"] + label {
+    display: block;
+    padding: 16px;
+    border-bottom: 1px solid #BABEC2;
+}
+.perseus-widget-radio input[type="radio"]:focus + label:before {
+    box-shadow: 0px 0px 0px 2px white, 0px 0px 0px 4px rgb(136, 141, 147);
+}
+.perseus-widget-radio input[type="radio"] + label:before {
+    content: "-";
+    font-weight: bold;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    border-radius: 14px;
+    color: rgb(136, 141, 147);
+    border-color: rgb(136, 141, 147);
+    border: 2px solid;
+    margin-right: 16px;
+    line-height: 22px;
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(1):before {
+    content: "A";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(2):before {
+    content: "B";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(3):before {
+    content: "C";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(4):before {
+    content: "D";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(5):before {
+    content: "E";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(6):before {
+    content: "F";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(7):before {
+    content: "G";
+}
+.perseus-widget-radio input[type="radio"] + label:nth-of-type(8):before {
+    content: "H";
+}
+.perseus-widget-radio input[type="radio"]:checked + label {
+    background-color: white;
+}
+.perseus-widget-radio input[type="radio"]:checked + label:before {
+    background-color: rgb(113, 179, 7);
+    border-color: rgb(113, 179, 7);
+    color: white;
+}
+.perseus-widget-radio input[type="radio"]:checked:focus + label:before {
+    box-shadow: 0px 0px 0px 2px white, 0px 0px 0px 4px rgb(113, 179, 7);
+}
