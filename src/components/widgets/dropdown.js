@@ -1,5 +1,4 @@
 import React from "react";
-import MathQuill, { addStyles as addMathquillStyles } from "react-mathquill";
 import { makeWidgetStateful } from "../utils/state-manager";
 
 function checkAnswer(props, state = props.state) {

@@ -1,5 +1,6 @@
 /*! KAS | https://github.com/Khan/KAS */
 // This is a @generated file
+/* eslint-disable */
 var _, KAS = {};
 
 if (typeof module === "object" && module.exports) {
