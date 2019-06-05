@@ -1,6 +1,8 @@
 import React from "react";
 import { makeWidgetStateful } from "../utils/state-manager";
 
+import "../../css/widgets/dropdown.css";
+
 function checkAnswer(props, state = props.state) {
     const { options, id } = props;
     const { choices } = options;
@@ -41,7 +43,11 @@ function DropdownWidget(props) {
     };
 
     return (
-        <select value={selected} onChange={e => setSelected(e.target.value)}>
+        <select
+            className="perseus-widget-dropdown"
+            value={selected}
+            onChange={e => setSelected(e.target.value)}
+        >
             <option value="" disabled>
                 {options.placeholder}
             </option>

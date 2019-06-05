@@ -2,7 +2,7 @@ import React from "react";
 import { InlineMarkdownRenderer } from "../inline-markdown-renderer";
 import { makeWidgetStateful } from "../utils/state-manager";
 
-import "../../css/components/radio.css";
+import "../../css/widgets/radio.css";
 
 function filledArray(length, val) {
     return Array.from({ length }, () => val);

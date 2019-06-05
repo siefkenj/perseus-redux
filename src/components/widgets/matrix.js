@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { InlineMarkdownRenderer } from "../inline-markdown-renderer";
 import { makeWidgetStateful } from "../utils/state-manager";
 
-import "../../css/components/matrix.css";
+import "../../css/widgets/matrix.css";
 
 const NORMAL_DIMENSIONS = {
     INPUT_MARGIN: 3,

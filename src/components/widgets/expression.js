@@ -3,6 +3,8 @@ import MathQuill, { addStyles as addMathquillStyles } from "react-mathquill";
 import KAS from "../../libs/kas.js";
 import { makeWidgetStateful } from "../utils/state-manager";
 
+import "../../css/widgets/expression.css";
+
 const insertBraces = value => {
     // HACK(alex): Make sure that all LaTeX super/subscripts are wrapped
     // in curly braces to avoid the mismatch between KAS and LaTeX sup/sub
@@ -103,7 +105,11 @@ function ExpressionWidget(props) {
     };
 
     return (
-        <MathQuill latex={contents} onChange={latex => setContents(latex)} />
+        <MathQuill
+            className="perseus-widget-expression"
+            latex={contents}
+            onChange={latex => setContents(latex)}
+        />
     );
 }
 
