@@ -7,7 +7,6 @@ function checkAnswer(props, state = props.state) {
     const { options, id } = props;
     const { choices } = options;
     const { selected } = state;
-    console.log(state);
 
     // selected is a string, so !selected will be true
     // if the string is non-empty

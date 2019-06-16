@@ -9,6 +9,9 @@ export function generateStoreForWidgetTree() {
             const widgetId = payload.widget;
             const widgetState = payload.state;
             state.widgets[widgetId] = widgetState;
+        }),
+        restoreState: action((state, payload) => {
+            return payload;
         })
     });
     return store;

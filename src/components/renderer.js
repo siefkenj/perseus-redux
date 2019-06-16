@@ -5,7 +5,7 @@ import { StoreProvider } from "easy-peasy";
 import { Radio } from "./widgets/radio";
 import { Matrix } from "./widgets/matrix";
 import { Expression } from "./widgets/expression";
-import { Dropdown } from "./widgets/dropdown"
+import { Dropdown } from "./widgets/dropdown";
 
 function missingWidgetFactory(type) {
     return function MissingWidget(props) {
@@ -32,22 +32,31 @@ function getWidget(type) {
 // Render a question and all subwidgets. State is tracked via
 // a redux store created by `QuestionRenderer`.
 function QuestionRenderer(props) {
-    const { children, question, ...rest } = props;
+    const { children, question, onChange, ...rest } = props;
     const { content, widgets } = question;
     // get a persistent redux store for managing all the states of
     // inlculded widgets
-    const store = React.useState(generateStoreForWidgetTree())[0];
+    const _store = React.useState(generateStoreForWidgetTree)[0];
+    // we might have passed in a store. If so, use that store instead.
+    // however, because hooks cannot be called conditionally, we must
+    // get `_store` even if we aren't using it.
+    const store = rest.store || _store;
+
     const parsed = PerseusMarkdown.parse(content);
+
+    // Set up an onChange callback by subscribing to the store.
+    // By doing this, we get notified of every single "change" (even if the change is empty);
+    store.subscribe(() => {
+        if (onChange) {
+            onChange(store.getState());
+        }
+    });
 
     // here is where we render the individual widgets in the parsed
     // markdown tree.
     const rules = {
         widget: {
             react: (node, output, state) => {
-                // The actual output is handled in the renderer, where
-                // we know the current widget props/state. This is
-                // just a stub for testing.
-                console.log(node, output, state);
                 const widgetProps = widgets[node.id];
                 if (!widgetProps) {
                     console.warn("Cannot find properties for ", node);

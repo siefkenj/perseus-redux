@@ -47,7 +47,6 @@ function checkAnswer(props, state = props.state) {
     const { options, id } = props;
     const { answerForms } = options;
     const { contents } = state;
-    console.log(state);
 
     const parsedUserInput = KAS.parse(insertBraces(contents));
 

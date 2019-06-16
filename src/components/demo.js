@@ -1,26 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
+// When this library gets loaded, window.PerseusRedux will be created.
+// We want to access that global object, not anything else to avoid
+// multiple copies of Redux getting loaded accidentally
+import * as _PerseusRedux from "../perseus-redux.js";
+// Use the version of React provided by perseus-redux
+const { React } = window.PerseusRedux;
 
-// a lite computer algebra system
-import KAS from "../libs/kas.js";
-//import MathJax from "react-mathjax";
-import TeX from "./tex.js";
-import MathQuill, { addStyles as addMathquillStyles } from "react-mathquill";
-import SM from "simple-markdown";
-import * as PM from "./utils/perseus-markdown";
-
-import QuestionRenderer from "./renderer";
-
-window.SM = SM;
-window.PM = PM;
-window.React = React;
-window.ReactDOM = ReactDOM;
-
-window.KAS = KAS;
-
-addMathquillStyles();
-
-let qq = (window.qq = {
+let defaultQuestion = {
     question: {
         content:
             "What kind of matrix has a nullspace of $dim=\\vec 9$?\n\n$\\begin{bmatrix}2\\\\3\\\\4\\end{bmatrix}$\n\nfollow [[☃ matrix 1]] me\n\n[[☃ radio 1]]\n\n|| **Table title** ||\nheader 1 | header 2 | header 3\n- | - | -\ndata 1 | data 2 | $\\int x^4$\ndata 4 | data 5 | data 6\ndata 7 | data 8 | data 9",
@@ -86,150 +71,145 @@ let qq = (window.qq = {
         minor: 1
     },
     hints: []
-});
+};
 
-qq= {
-    "question": {
-        "content": "$x=$ [[☃ expression 1]][[☃ dropdown 1]]\n\n[[☃ radio 1]]\n\n",
-        "images": {},
-        "widgets": {
+defaultQuestion = {
+    question: {
+        content: "$x=$ [[☃ expression 1]][[☃ dropdown 1]]\n\n[[☃ radio 1]]\n\n",
+        images: {},
+        widgets: {
             "expression 1": {
-                "type": "expression",
-                "alignment": "default",
-                "static": false,
-                "graded": true,
-                "options": {
-                    "answerForms": [
+                type: "expression",
+                alignment: "default",
+                static: false,
+                graded: true,
+                options: {
+                    answerForms: [
                         {
-                            "value": "\\frac{1}{2}",
-                            "form": false,
-                            "simplify": false,
-                            "considered": "correct",
-                            "key": 0
+                            value: "\\frac{1}{2}",
+                            form: false,
+                            simplify: false,
+                            considered: "correct",
+                            key: 0
                         }
                     ],
-                    "buttonSets": [
-                        "basic"
-                    ],
-                    "functions": [
-                        "f",
-                        "g",
-                        "h"
-                    ],
-                    "times": false
+                    buttonSets: ["basic"],
+                    functions: ["f", "g", "h"],
+                    times: false
                 },
-                "version": {
-                    "major": 1,
-                    "minor": 0
+                version: {
+                    major: 1,
+                    minor: 0
                 }
             },
             "dropdown 1": {
-                "type": "dropdown",
-                "alignment": "default",
-                "static": false,
-                "graded": true,
-                "options": {
-                    "static": false,
-                    "placeholder": "Select",
-                    "choices": [
+                type: "dropdown",
+                alignment: "default",
+                static: false,
+                graded: true,
+                options: {
+                    static: false,
+                    placeholder: "Select",
+                    choices: [
                         {
-                            "content": "$=$",
-                            "correct": false
+                            content: "$=$",
+                            correct: false
                         },
                         {
-                            "content": "$\\geq$",
-                            "correct": true
+                            content: "$\\geq$",
+                            correct: true
                         },
                         {
-                            "content": "$\\leq$",
-                            "correct": false
+                            content: "$\\leq$",
+                            correct: false
                         }
                     ]
                 },
-                "version": {
-                    "major": 0,
-                    "minor": 0
+                version: {
+                    major: 0,
+                    minor: 0
                 }
             },
             "radio 1": {
-                "type": "radio",
-                "alignment": "default",
-                "static": false,
-                "graded": true,
-                "options": {
-                    "choices": [
+                type: "radio",
+                alignment: "default",
+                static: false,
+                graded: true,
+                options: {
+                    choices: [
                         {
-                            "content": "My super answer",
-                            "correct": true
+                            content: "My super answer",
+                            correct: true
                         },
                         {
-                            "correct": false,
-                            "content": "My other answer",
-                            "clue": "Because, you know...."
+                            correct: false,
+                            content: "My other answer",
+                            clue: "Because, you know...."
                         },
                         {
-                            "isNoneOfTheAbove": true,
-                            "correct": false,
-                            "content": ""
+                            isNoneOfTheAbove: true,
+                            correct: false,
+                            content: ""
                         }
                     ],
-                    "randomize": false,
-                    "multipleSelect": true,
-                    "countChoices": false,
-                    "displayCount": null,
-                    "hasNoneOfTheAbove": true,
-                    "deselectEnabled": false
+                    randomize: false,
+                    multipleSelect: true,
+                    countChoices: false,
+                    displayCount: null,
+                    hasNoneOfTheAbove: true,
+                    deselectEnabled: false
                 },
-                "version": {
-                    "major": 1,
-                    "minor": 0
+                version: {
+                    major: 1,
+                    minor: 0
                 }
             }
         }
     },
-    "answerArea": {
-        "calculator": false,
-        "chi2Table": false,
-        "periodicTable": false,
-        "tTable": false,
-        "zTable": false
+    answerArea: {
+        calculator: false,
+        chi2Table: false,
+        periodicTable: false,
+        tTable: false,
+        zTable: false
     },
-    "itemDataVersion": {
-        "major": 0,
-        "minor": 1
+    itemDataVersion: {
+        major: 0,
+        minor: 1
     },
-    "hints": []
-}
+    hints: []
+};
 
-function Demo() {
-    const [latex, setLatex] = React.useState("\\sqrt{2}");
-    const parsed = KAS.parse(latex);
-    let evaled, code;
-    if (parsed.parsed) {
+// Widget to render the JSON content of a question
+function QuestionText(props) {
+    const { defaultQuestionStr, onChange } = props;
+    const [questionStr, setQuestionStr] = React.useState(defaultQuestionStr);
+    const [parseError, setParseError] = React.useState(false);
+
+    function setQuestion(questionStr) {
+        setQuestionStr(questionStr);
+        let newQuestion = {};
         try {
-            evaled = parsed.expr.eval();
-        } catch (e) {}
-        try {
-            code = parsed.expr.codegen() + " | " + parsed.expr.print();
-        } catch (e) {}
+            newQuestion = JSON.parse(questionStr);
+            setParseError(false);
+            if (onChange) {
+                onChange(newQuestion);
+            }
+        } catch (e) {
+            setParseError(true);
+            return;
+        }
     }
     return (
-        <div>
-            my content{" "}
-            <MathQuill
-                latex={latex}
-                onChange={x => {
-                    console.log("changing", x);
-                    setLatex(x);
-                }}
-            />
-            <TeX inline>{"\\displaystyle " + latex}</TeX>
-            <div>
-                computed: {evaled} ({code})
-            </div>
-                <QuestionRenderer question={qq.question} />
-        </div>
+        <textarea
+            className={"question-json" + (parseError ? " parse-error" : "")}
+            id="_question"
+            value={questionStr}
+            onChange={e => {
+                setQuestion(e.target.value);
+            }}
+        />
     );
 }
 
-export default Demo;
+export { defaultQuestion, QuestionText };
