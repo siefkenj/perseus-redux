@@ -1,3 +1,37 @@
+## Perseus Redux
+
+Perseus Redux is a reimplimentation of Khan Academy's [Perseus](https://github.com/Khan/perseus/)
+framework for answering questions. It has been designed for integration
+with WebWork.
+
+You can see a [demo](https://siefkenj.github.io/perseus-redux/). JSON authored in Khan Academy's
+[Perseus Lab](https://github.com/Khan/perseus/) can be copy-and-pasted into the 
+[Perseus Redux Demo](https://siefkenj.github.io/perseus-redux/).
+
+### Using Perseus Redux
+
+Perseus Redux is built using React and create-react-app, though
+with some overrides to the build process.
+You can use `node` and `npm` to build and develop, or grab the pre-built javascript
+and css files.
+
+Include
+
+```
+	<script scr="https://siefkenj.github.io/perseus-redux/static/js/perseus-redux.min.js"></script>
+	<link rel="stylesheet" href="https://siefkenj.github.io/perseus-redux/static/css/perseus-redux.css">
+```
+
+in your HTML file. A global `PerseusRedux` object should be available. Follow the example
+html file for a template of how to interact with PerseusRedux.
+
+#### Multiplie Copies of React
+
+Perseus Redux comes with its own copy of react. Because Perseus Redux uses React Hooks, it must
+be rendered using its version of react which is available as `PerseusRedux.React` and `PerseusRedux.ReactDOM`
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
