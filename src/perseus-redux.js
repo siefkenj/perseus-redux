@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import QuestionRenderer from "./components/renderer.js";
+import KAS from "./libs/kas.js";
 import { generateStoreForWidgetTree } from "./components/utils/state-manager.js";
 import MathQuill, { addStyles as addMathquillStyles } from "react-mathquill";
 MathQuill.addMathquillStyles = addMathquillStyles;
@@ -36,7 +37,6 @@ function statusFromState(state, question = { widgets: {} }) {
         // there may have been widgets whose state was not in the state object.
         // check the quesiton object to make sure we haven't missed any
         for (const id in question.widgets) {
-            console.log(id, "DID")
             if (!state.widgets[id]) {
                 messages["incomplete"].push(`Incomplete answer for ${id}`);
                 statuses["incomplete"].push(id);
@@ -45,8 +45,6 @@ function statusFromState(state, question = { widgets: {} }) {
     } catch (e) {
         console.log("Error when reading state", e);
     }
-
-    console.log("Statuses", statuses)
 
     if (statuses.incomplete.length > 0) {
         return {
@@ -73,7 +71,8 @@ if (typeof PerseusRedux === "undefined") {
         MathQuill,
         generateStoreForWidgetTree,
         initializeStore,
-        statusFromState
+        statusFromState,
+        KAS
     };
 } else {
     console.log("perseus-redux already loaded");

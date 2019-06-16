@@ -1,4 +1,5 @@
 import React from "react";
+import KAS from "../../libs/kas.js";
 import classNames from "classnames";
 import { InlineMarkdownRenderer } from "../inline-markdown-renderer";
 import { makeWidgetStateful } from "../utils/state-manager";
@@ -40,6 +41,99 @@ function findEnclosingDimensions(matrix) {
     return [rowMax + 1, colMax + 1];
 }
 
+class MatrixExpression {
+    constructor(matrix) {
+        this._mat = matrix || [[]];
+        this.rows = this._mat.length;
+        this.cols = (this._mat || [[]])[0].length;
+        this._emptyExpression = KAS.parse("").expr;
+
+        // parse the matrix
+        this._parsedMat = Array.from({ length: this.rows }, () =>
+            Array.from({ length: this.cols }, () => "")
+        );
+        this._unparsedEntries = {};
+        this._mat.forEach((row, i) => {
+            row.forEach((v, j) => {
+                const parsed = KAS.parse("" + v);
+                if (parsed.parsed) {
+                    this._parsedMat[i][j] = parsed.expr;
+                } else {
+                    this._unparsedEntries[[i, j]] = parsed.error;
+                }
+            });
+        });
+        this.didParse = Object.keys(this._unparsedEntries).length === 0;
+        this.isEmpty =
+            this.didParse &&
+            this._parsedMat.every(row => row.every(v => v.print() === ""));
+        this.flattened = [];
+        this._parsedMat.forEach(row => {
+            row.forEach(v => {
+                this.flattened.push(v);
+            });
+        });
+    }
+    elm(i, j) {
+        return this._parsedMat[i][j] || this._emptyExpression;
+    }
+}
+
+function checkAnswer(props, state = props.state) {
+    const { options, id } = props;
+    const { answers } = options;
+    const { contents } = state;
+
+    const parsedContents = new MatrixExpression(contents);
+    const parsedAnswer = new MatrixExpression(answers);
+
+    // if the user input didn't parse, it's incomplete
+    if (!parsedContents) {
+        return {
+            status: "incomplete",
+            message: `The entries (${Object.keys(
+                parsedContents._unparsedEntries
+            ).join("), (")}) in ${id} couldn't be parsed`
+        };
+    }
+
+    if (parsedContents.isEmpty) {
+        return {
+            status: "incomplete",
+            message: `Type a math expression into ${id}`
+        };
+    }
+
+    // check each value to see if it matches the answer
+    for (let i = 0; i < parsedContents.flattened.length; i++) {
+        const expr1 = parsedContents.flattened[i];
+        const expr2 = parsedAnswer.flattened[i];
+
+        if (!expr1 || !expr2) {
+            // if either of the expressions are empty, there is some kind
+            // kind of error
+            console.warn(
+                "Trying to compare a size-mismatched or improperly parsed matrices",
+                parsedContents,
+                parsedAnswer
+            );
+            continue;
+        }
+
+        const result = KAS.compare(expr1, expr2);
+        if (!result.equal) {
+            return {
+                status: "incorrect",
+                message: `You have not entered the correct value for ${id}`
+            };
+        }
+    }
+    return {
+        status: "correct",
+        message: ""
+    };
+}
+
 function generateDefaultState(props) {
     const [rows, cols] = (props.options || {}).matrixBoardSize || [1, 1];
     return {
@@ -59,8 +153,10 @@ export function MatrixWidget(props) {
     // set up some state
     const [cursorPos, setCursorPos] = React.useState([0, 0]);
     const { contents } = state;
-    const setContents = contents => {
-        setState({ ...state, contents: contents });
+    const setContents = c => {
+        const newState = { ...state, contents: c };
+        const status = checkAnswer(props, newState);
+        setState({ ...newState, status });
     };
     //const [contents, setContents] = React.useState();
 

@@ -73,6 +73,7 @@ let defaultQuestion = {
     hints: []
 };
 
+/*
 defaultQuestion = {
     question: {
         content: "$x=$ [[☃ expression 1]][[☃ dropdown 1]]\n\n[[☃ radio 1]]\n\n",
@@ -179,7 +180,7 @@ defaultQuestion = {
     },
     hints: []
 };
-
+*/
 // Widget to render the JSON content of a question
 function QuestionText(props) {
     const { defaultQuestionStr, onChange } = props;
