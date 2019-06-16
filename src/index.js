@@ -59,7 +59,7 @@ if (!window.PerseusRedux.hasRenderedDemo) {
     // we want to change the DOM without using react
     function onStateChange(state = {}) {
         const stateStr = JSON.stringify(state);
-        const status = statusFromState(state, defaultQuestion.question);
+        const status = statusFromState(state, extraState.question.question);
 
         document.getElementById("_state").value = stateStr;
         document.getElementById("_status").value = status.status;

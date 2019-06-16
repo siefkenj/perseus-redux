@@ -88,7 +88,7 @@ function checkAnswer(props, state = props.state) {
     const parsedAnswer = new MatrixExpression(answers);
 
     // if the user input didn't parse, it's incomplete
-    if (!parsedContents) {
+    if (!parsedContents.didParse) {
         return {
             status: "incomplete",
             message: `The entries (${Object.keys(
