@@ -23,7 +23,8 @@ Include
 ```
 
 in your HTML file. A global `PerseusRedux` object should be available. Follow the example
-html file for a template of how to interact with PerseusRedux.
+html in [public/example.html](public/example.html) for a template of how to interact with PerseusRedux or
+interact with the example [live](https://siefkenj.github.io/perseus-redux/example.html).
 
 #### Multiplie Copies of React
 

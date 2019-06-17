@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perseus Redux Example</title>
+  </head>
+  <body>
+    <!-- set up inputs to store state, etc. in -->
+    <input type="text" id="_question"></input>
+    <input type="text" id="_state"></input>
+    <input type="text" id="_status"></input>
+    <input type="text" id="_message"></input>
+    <div id="question-container" style="margin: 10px; padding: 10px; border: 1px solid black;"></div>
+    
+    <!-- This is where the PerseusRedux code starts -->
+    <link href="./static/css/perseus-redux.min.css" rel="stylesheet" />
+    <script src="./static/js/perseus-redux.min.js"></script>
+    <script>
+      // PerseusRedux is a global object that has copies of the needed libraries.
+      var React = PerseusRedux.React;
+      var ReactDOM = PerseusRedux.ReactDOM;
+      var Base64 = PerseusRedux.Base64; // Javascript's `atob` cannot handle unicode. `Base64` can.
+
+      // We are going to simulate reading the "question" and "state" from the 
+      // <input#_question> and <input#_state> elements,
+      // so in preparation, Base64 encode it and stick it in there. We Base64 encode because
+      // webwork cannot set the value of an input box that contains quotation marks, like most JSON will.
+      var question = {"question":{"content":"Consider the basis $\\mathcal B=\\{\\vec b_1,\\vec b_2\\}$ for $\\mathbb R^2$ where\n$\\vec b_1=\\begin{bmatrix}5\\\\-4\\end{bmatrix}$ and $\\vec b_2=\\begin{bmatrix}-3\\\\1\\end{bmatrix}$ (Note, both $\\vec b_1$ and $\\vec b_2$ are written in terms of the standard basis).\n\nYou know the following about the vector $\\vec x\\in\\mathbb R^2$:\n\n$[\\vec x]_{\\mathcal B}=\\begin{bmatrix}1\\\\1\\end{bmatrix}$\n\nFind $[\\vec x]_{\\mathcal E}$.\n\n[[☃ matrix 1]]\n\n","images":{},"widgets":{"matrix 1":{"type":"matrix","alignment":"default","static":false,"graded":true,"options":{"static":false,"matrixBoardSize":[2,1],"answers":[[2],[-3]],"prefix":"$[\\vec x]_{\\mathcal E}=$","suffix":"","cursorPosition":[0,0]},"version":{"major":0,"minor":0}}}},"answerArea":{"calculator":false,"chi2Table":false,"periodicTable":false,"tTable":false,"zTable":false},"itemDataVersion":{"major":0,"minor":1},"hints":[]};
+      document.getElementById("_question").value = Base64.encode(JSON.stringify(question));
+      var state = {"widgets":{"matrix 1":{"contents":[["2"],[""]],"status":{"status":"incorrect","message":"You have not entered the correct value for matrix 1"}}}}
+      document.getElementById("_state").value = Base64.encode(JSON.stringify(state));
+
+      // Start the real code in a closure so we don't leak variables to the javascript console
+      (function(){
+        var question = JSON.parse(Base64.decode(document.getElementById("_question").value));
+        // JSON.parse errors when parsing empty objects, so if there is no state provided, make sure
+        // to parse an "empty" state instead.
+        var state = JSON.parse(Base64.decode(document.getElementById("_state").value) || "{\"widgets\":{}}");
+
+        // createa a callback that will update the <input>s with the correct
+        // information when the question is edited
+        function onChange(state) {
+          // Again, WebWork cannot persist state with quotation marks in it, so base64 encode.
+          document.getElementById("_state").value = Base64.encode(JSON.stringify(state));
+          // statusFromState will loop through all answer types on the page
+          // and deliver "incorrect", "correct", or "incomplete" in an all-or-nothing
+          // fashion. By default, `state` only includes widgets that have been interacted
+          // with. By passing in `question`, we ensure that widgets that haven't been
+          // interacted with are reported as "incomplete"
+          var status = PerseusRedux.statusFromState(state, question);
+          document.getElementById("_status").value = status.status;
+          document.getElementById("_message").value = status.message;
+        }
+
+        // data for a PerseusRedux question is managed by a Redux store.
+        // If you want to have multiple questions on a single page, you should create
+        // different stores for each of them.
+        var store = PerseusRedux.createStore();
+        // Initialize the `store` with the loaded state
+        PerseusRedux.initializeStore(store, state);
+
+        // Create the React component that renders the PerseusRedux question
+        var questionRenderer = React.createElement(PerseusRedux.QuestionRenderer, {
+          question: question.question,
+          store: store,
+          onChange: onChange
+        });
+        // Render the component to the page
+        ReactDOM.render(questionRenderer, document.getElementById("question-container"));
+      })()
+    </script>
+  </body>
+</html>

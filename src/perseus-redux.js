@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Base64 } from "js-base64";
 import QuestionRenderer from "./components/renderer.js";
 import KAS from "./libs/kas.js";
 import { generateStoreForWidgetTree } from "./components/utils/state-manager.js";
@@ -13,6 +14,8 @@ MathQuill.addMathquillStyles = addMathquillStyles;
 //    }),
 //    document.getElementById("xxx")
 //);
+
+const createStore = generateStoreForWidgetTree;
 
 // Some helper functions
 function initializeStore(store, state) {
@@ -70,9 +73,11 @@ if (typeof PerseusRedux === "undefined") {
         QuestionRenderer,
         MathQuill,
         generateStoreForWidgetTree,
+        createStore, // A friendlier-named version
         initializeStore,
         statusFromState,
-        KAS
+        KAS,
+        Base64
     };
 } else {
     console.log("perseus-redux already loaded");
