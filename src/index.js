@@ -4,7 +4,7 @@ import "./index.css";
 // When this library gets loaded, window.PerseusRedux will be created.
 // We want to access that global object, not anything else to avoid
 // multiple copies of Redux getting loaded accidentally
-import * as _PerseusRedux from "./perseus-redux.js";
+import * as _PerseusRedux from "./perseus-redux.js"; // eslint-disable-line
 import { defaultQuestion, QuestionText } from "./components/demo.js";
 
 // inputs/textareas are used to ferry data between PerseusRedux
@@ -64,6 +64,9 @@ if (!window.PerseusRedux.hasRenderedDemo) {
         document.getElementById("_state").value = stateStr;
         document.getElementById("_status").value = status.status;
         document.getElementById("_messages").value = status.message;
+        document.getElementById("_formatted").value = JSON.stringify(
+            status.formatted
+        );
     }
 
     const defaultQuestionStr = JSON.stringify(defaultQuestion, null, 4);
@@ -100,6 +103,7 @@ if (!window.PerseusRedux.hasRenderedDemo) {
                         Current State: <input id="_state" />
                         Status: <input id="_status" />
                         Messages: <input id="_messages" />
+                        Messages: <input id="_formatted" />
                     </div>
                     <div className="question" id="question" />
                 </div>
