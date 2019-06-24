@@ -13,9 +13,29 @@ function checkAnswer(props, state = props.state) {
     const { choices } = options;
     const { selected } = state;
 
+    // prepare formatted versions of the answers
+    function choicesToString(choices) {
+        const ret = [];
+        choices.forEach((c, i) => {
+            if ((typeof c === "boolean" && c) || c.correct) {
+                ret.push(String.fromCharCode(65 + i));
+            }
+        });
+        return ret;
+    }
+    const formattedAnswer = choicesToString(choices).join(", ");
+    const formattedSelected = choicesToString(selected).join(", ");
+    const ret = {
+        formatted: {
+            answer: { str: formattedAnswer, tex: formattedAnswer },
+            contents: { str: formattedSelected, tex: formattedSelected }
+        }
+    };
+
     // for single-select, we must select one of the options
     if (!options.multipleSelect && selected.every(x => !x)) {
         return {
+            ...ret,
             status: "incomplete",
             message: `You must select at least one options for ${id}`
         };
@@ -26,9 +46,10 @@ function checkAnswer(props, state = props.state) {
             return x === choices[i].correct;
         })
     ) {
-        return { status: "correct" };
+        return { ...ret, status: "correct" };
     }
     return {
+        ...ret,
         status: "incorrect",
         message: `You have not selected the correct choice(s) for ${id}`
     };
@@ -46,6 +67,10 @@ function RadioWidget(props) {
     const randId = React.useState(("-" + Math.random()).replace(".", ""))[0];
 
     const { selected } = state;
+    // on first run, make sure we have access to the formatted answer
+    React.useEffect(() => {
+        setSelected(selected);
+    }, []); // eslint-disable-line
     const setSelected = selected => {
         // don't mutate `state`. Return a new copy instead
         const newState = { ...state, selected: selected };

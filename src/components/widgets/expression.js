@@ -50,9 +50,29 @@ function checkAnswer(props, state = props.state) {
 
     const parsedUserInput = KAS.parse(insertBraces(contents));
 
+    // prepare formatted versions of the answers
+    const firstValidAnswerForm =
+        answerForms.filter(v => v.considered === "correct")[0] || {};
+    const parsedAnswer = KAS.parse(firstValidAnswerForm.value || "").expr;
+
+    const ret = {
+        formatted: {
+            answer: { str: parsedAnswer.print(), tex: parsedAnswer.asTex() },
+            contents: {
+                str: parsedUserInput.parsed
+                    ? parsedUserInput.expr.print()
+                    : "-",
+                tex: parsedUserInput.parsed
+                    ? parsedUserInput.expr.asTex()
+                    : "\\space"
+            }
+        }
+    };
+
     // if the user input didn't parse, it's incomplete
     if (!parsedUserInput.parsed) {
         return {
+            ...ret,
             status: "incomplete",
             message: `The math expression you typed in ${id} couldn't be parsed`
         };
@@ -60,6 +80,7 @@ function checkAnswer(props, state = props.state) {
 
     if (parsedUserInput.expr.print() === "") {
         return {
+            ...ret,
             status: "incomplete",
             message: `Type a math expression into ${id}`
         };
@@ -74,15 +95,17 @@ function checkAnswer(props, state = props.state) {
             form
         );
         if (result.equal && form.considered === "correct") {
-            return { status: "correct" };
+            return { ...ret, status: "correct" };
         } else if (result.equal && form.considered === "incorrect") {
             return {
+                ...ret,
                 status: "incorrect",
                 message: `You have not entered the correct value for ${id}`
             };
         }
     }
     return {
+        ...ret,
         status: "incorrect",
         message: `You have not entered the correct value for ${id}`
     };
@@ -96,6 +119,10 @@ function ExpressionWidget(props) {
     const { options, id, state, setState } = props;
 
     const { contents } = state;
+    // on first run, make sure we have access to the formatted answer
+    React.useEffect(() => {
+        setContents(contents);
+    }, []); // eslint-disable-line
     const setContents = c => {
         // don't mutate `state`. Return a new copy instead
         const newState = { ...state, contents: c };

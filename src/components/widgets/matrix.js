@@ -46,27 +46,37 @@ class MatrixExpression {
         this._mat = matrix || [[]];
         this.rows = this._mat.length;
         this.cols = (this._mat || [[]])[0].length;
-        this._emptyExpression = KAS.parse("").expr;
+        this._emptyExpression = KAS.parse("0").expr;
 
         // parse the matrix
         this._parsedMat = Array.from({ length: this.rows }, () =>
-            Array.from({ length: this.cols }, () => "")
+            Array.from({ length: this.cols }, () => this._emptyExpression)
         );
         this._unparsedEntries = {};
         this._mat.forEach((row, i) => {
             row.forEach((v, j) => {
-                const parsed = KAS.parse("" + v);
-                if (parsed.parsed) {
-                    this._parsedMat[i][j] = parsed.expr;
+                // empty matrix entries should be parsed as whatever `_emptyExpression`
+                // is.
+                if (v != null && v.trim && v.trim() === "") {
+                    this._parsedMat[i][j] = this._emptyExpression;
                 } else {
-                    this._unparsedEntries[[i, j]] = parsed.error;
+                    const parsed = KAS.parse("" + v);
+                    if (parsed.parsed) {
+                        this._parsedMat[i][j] = parsed.expr;
+                    } else {
+                        this._unparsedEntries[[i, j]] = parsed.error;
+                    }
                 }
             });
         });
         this.didParse = Object.keys(this._unparsedEntries).length === 0;
+        // because we substitute "" with `0` when parsing the matrix,
+        // we need to refer to the original `_mat` to check if it's empty
         this.isEmpty =
             this.didParse &&
-            this._parsedMat.every(row => row.every(v => v.print() === ""));
+            this._mat.every(row =>
+                row.every(v => v != null && v.trim && v.trim() === "")
+            );
         this.flattened = [];
         this._parsedMat.forEach(row => {
             row.forEach(v => {
@@ -76,6 +86,22 @@ class MatrixExpression {
     }
     elm(i, j) {
         return this._parsedMat[i][j] || this._emptyExpression;
+    }
+    format() {
+        return {
+            str:
+                "[[" +
+                this._parsedMat
+                    .map(row => row.map(val => val.print()).join(", "))
+                    .join("], [") +
+                "]]",
+            tex:
+                "\\begin{bmatrix}" +
+                this._parsedMat
+                    .map(row => row.map(val => val.asTex()).join(" & "))
+                    .join("\\\\\n") +
+                "\\end{bmatrix}"
+        };
     }
 }
 
@@ -87,18 +113,33 @@ function checkAnswer(props, state = props.state) {
     const parsedContents = new MatrixExpression(contents);
     const parsedAnswer = new MatrixExpression(answers);
 
+    // prepare formatted versions of the answers
+    const ret = {
+        formatted: {
+            contents: parsedContents.format(),
+            answer: parsedAnswer.format()
+        }
+    };
+
     // if the user input didn't parse, it's incomplete
     if (!parsedContents.didParse) {
+        // convert the unparsedEntries to matrix-index convention. I.e.,
+        // start with a 1-index instead of a 0-index
+        let unparsedEntries = Object.keys(parsedContents._unparsedEntries).map(
+            e => e.split(",").map(v => +v + 1)
+        );
         return {
+            ...ret,
             status: "incomplete",
-            message: `The entries (${Object.keys(
-                parsedContents._unparsedEntries
-            ).join("), (")}) in ${id} couldn't be parsed`
+            message: `The entry(s) (${unparsedEntries
+                .map(e => e.join(","))
+                .join("), (")}) in ${id} couldn't be parsed`
         };
     }
 
     if (parsedContents.isEmpty) {
         return {
+            ...ret,
             status: "incomplete",
             message: `Type a math expression into ${id}`
         };
@@ -123,15 +164,13 @@ function checkAnswer(props, state = props.state) {
         const result = KAS.compare(expr1, expr2);
         if (!result.equal) {
             return {
+                ...ret,
                 status: "incorrect",
                 message: `You have not entered the correct value for ${id}`
             };
         }
     }
-    return {
-        status: "correct",
-        message: ""
-    };
+    return { ...ret, status: "correct", message: "" };
 }
 
 function generateDefaultState(props) {
@@ -153,6 +192,10 @@ export function MatrixWidget(props) {
     // set up some state
     const [cursorPos, setCursorPos] = React.useState([0, 0]);
     const { contents } = state;
+    // on first run, make sure we have access to the formatted answer
+    React.useEffect(() => {
+        setContents(contents);
+    }, []); // eslint-disable-line
     const setContents = c => {
         const newState = { ...state, contents: c };
         const status = checkAnswer(props, newState);
