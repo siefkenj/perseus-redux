@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "./static/css/main.css",
+    "main.js": "./static/js/main.js",
+    "main.js.map": "./static/js/main.js.map",
+    "perseus-redux.css": "./static/css/perseus-redux.css",
+    "perseus-redux.js": "./static/js/perseus-redux.js",
+    "perseus-redux.js.map": "./static/js/perseus-redux.js.map",
+    "perseus-redux.min.css": "./static/css/perseus-redux.min.css",
+    "perseus-redux.min.js": "./static/js/perseus-redux.min.js",
+    "perseus-redux.min.js.map": "./static/js/perseus-redux.min.js.map",
+    "index.html": "./index.html",
+    "precache-manifest.ce6681e8a8cae05b193bba27f7017d9d.js": "./precache-manifest.ce6681e8a8cae05b193bba27f7017d9d.js",
+    "service-worker.js": "./service-worker.js",
+    "static/css/main.css.map": "./static/css/main.css.map",
+    "static/css/perseus-redux.css.map": "./static/css/perseus-redux.css.map",
+    "static/css/perseus-redux.min.css.map": "./static/css/perseus-redux.min.css.map",
+    "static/media/katex.min.css": "./static/media/KaTeX_Typewriter-Regular.f43e8696.woff2"
+  }
+}
