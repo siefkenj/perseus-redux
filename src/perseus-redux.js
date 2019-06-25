@@ -5,7 +5,6 @@ import QuestionRenderer from "./components/renderer.js";
 import KAS from "./libs/kas.js";
 import { generateStoreForWidgetTree } from "./components/utils/state-manager.js";
 import MathQuill, { addStyles as addMathquillStyles } from "react-mathquill";
-import { removeProperties } from "@babel/types";
 MathQuill.addMathquillStyles = addMathquillStyles;
 
 //MathQuill.addMathquillStyles()
@@ -20,7 +19,7 @@ const createStore = generateStoreForWidgetTree;
 
 // Some helper functions
 function initializeStore(store, state) {
-    console.log("restoring state", state);
+    // the `type` is determined by the easy-peasy library
     store.dispatch({ type: "@action.restoreState", payload: state });
 }
 

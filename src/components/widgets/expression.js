@@ -53,7 +53,7 @@ function checkAnswer(props, state = props.state) {
     // prepare formatted versions of the answers
     const firstValidAnswerForm =
         answerForms.filter(v => v.considered === "correct")[0] || {};
-    const parsedAnswer = KAS.parse(firstValidAnswerForm.value || "").expr;
+    const parsedAnswer = KAS.parse("" + firstValidAnswerForm.value || "").expr;
 
     const ret = {
         formatted: {
@@ -91,7 +91,7 @@ function checkAnswer(props, state = props.state) {
         // assume answer forms will parse correctly
         const result = KAS.compare(
             parsedUserInput.expr,
-            KAS.parse(form.value).expr,
+            KAS.parse("" + form.value).expr,
             form
         );
         if (result.equal && form.considered === "correct") {

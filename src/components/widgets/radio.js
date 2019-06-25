@@ -17,7 +17,7 @@ function checkAnswer(props, state = props.state) {
     function choicesToString(choices) {
         const ret = [];
         choices.forEach((c, i) => {
-            if ((typeof c === "boolean" && c) || c.correct) {
+            if (c != null && ((typeof c === "boolean" && c) || c.correct)) {
                 ret.push(String.fromCharCode(65 + i));
             }
         });

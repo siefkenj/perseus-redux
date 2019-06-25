@@ -367,7 +367,7 @@ var rules = _.extend({}, SimpleMarkdown.defaultRules, {
             // TODO(charlie): Move this logic out of Perseus and into webapp via
             // the <Link /> component that is now injected as a dependency.
             if (typeof KA !== "undefined" && KA.isZeroRated) {
-                if (href.match(/https?:\/\/[^\/]*khanacademy.org/)) {
+                if (href.match(/https?:\/\/[^/]*khanacademy.org/)) {
                     href = href.replace(
                         "khanacademy.org",
                         "zero.khanacademy.org"
