@@ -43,7 +43,9 @@ function checkAnswer(props, state = props.state) {
     // we must match the choices exactly
     if (
         selected.every((x, i) => {
-            return x === choices[i].correct;
+            // cast everything to a boolean first, otherwise a missing `correct`
+            // attribute will cause this test to fail
+            return !!x === !!choices[i].correct;
         })
     ) {
         return { ...ret, status: "correct" };
