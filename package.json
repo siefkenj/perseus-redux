@@ -16,7 +16,7 @@
     "react-mathquill": "^0.1.4",
     "react-scripts": "3.0.1",
     "simple-markdown": "^0.5.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   },
   "scripts": {
     "start": "react-app-rewired start",
