@@ -14,7 +14,7 @@
     "react-dom": "^16.8.6",
     "react-katex": "^2.0.2",
     "react-mathquill": "^0.1.4",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "simple-markdown": "^0.5.2",
     "underscore": "^1.9.1"
   },
